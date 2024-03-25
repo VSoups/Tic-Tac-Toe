@@ -44,7 +44,7 @@ html {
   }
   
   #game-board > div:hover {
-      background-color:  rgba(102, 204, 255, 0.5);
+      background-color:  rgba(102, 204, 255, 0.5); /* color being overrided by js inline style */
       transform: scale(1.1);
       transition: 0.1s ease-in-out;
   }

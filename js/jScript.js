@@ -1,7 +1,7 @@
 /*----- constants -----*/
 const PLAYER_COLORS = {
-    null: 'white',
-    1: 'green',
+    'null': 'white',
+    '1': 'green',
     '-1': 'pink',
 };
 
@@ -17,6 +17,7 @@ const gridSqrs = [ ...document.querySelectorAll('#game-board > div')];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener('click', init);
+document.querySelector('#game-board').addEventListener('click', handleClick);
 
 /*----- functions -----*/
 init();
@@ -24,8 +25,8 @@ init();
 
 function init() {
             // 1     2    3     4     5     6     7     8      9    cell numbers
-    board = [null, null, 1, null, null, null, null, null, null];
-    turn = 1; // P1 starts
+    board = [null, null, null, null, null, null, null, null, null];
+    turn = '1'; // P1 starts
     winner = null; //game in progress
     render();
 };
@@ -38,10 +39,10 @@ function render() {
 };
 
 function renderBoard() {
-    gridSqrs.forEach(function(sqrNum, sqrVal) {
-        const clickedSqr = document.getElementById(`cell0${sqrNum}`);
-
-        clickedSqr.style.backgroundColor = PLAYER_COLORS[sqrVal];
+    gridSqrs.forEach(function(sqrNum, sqrIdx) {
+        sqrNum.setAttribute('id', `cell0${sqrIdx}`);
+        const clickedSqr = document.getElementById(`cell0${sqrIdx}`);
+        clickedSqr.style.backgroundColor = PLAYER_COLORS[board[sqrIdx]];
     });
 }
 
@@ -49,14 +50,14 @@ function renderMessage() {
     if (winner === 'T') {
         msgEl.innerText = 'Out of moves, it\'s a tie!'
     } else if (winner === turn) {
-        msgEl.innerText = `<span style="color: ${PLAYER_COLORS[winner]}">${PLAYER_COLORS[winner].toUpperCase()}</span> wins!`
+        msgEl.innerHTML = `<span style="color: ${PLAYER_COLORS[winner]}">${PLAYER_COLORS[winner].toUpperCase()}</span> wins!`
     } else {
-        msgEl.innerText = `It's <span style="color: ${PLAYER_COLORS[turn]}">${PLAYER_COLORS[turn].toUpperCase()}</span>'s turn.`
+        msgEl.innerHTML = `It's <span style="color: ${PLAYER_COLORS[turn]}">${PLAYER_COLORS[turn].toUpperCase()}</span>'s turn.`
     }
 }
 
 function renderControls() {
-    if (winner === true) {
+    if (winner == true) {
         resetBtn.style.visibility = 'visible';
     } else {
         resetBtn.style.visibility = 'hidden'
@@ -68,6 +69,18 @@ function renderControls() {
     // });
 }
 
-function handleClick() {
-
+function handleClick(evt) {
+    // console.log(boardIdx);
+    const boardIdx = gridSqrs.indexOf(evt.target)
+    if (board[boardIdx] !== null) {
+        return;
+    }
+    winner = getWinner(boardIdx);
+    board[boardIdx] = turn;
+    turn *= -1;
+    render();
 };
+
+function getWinner(boardIdx) {
+    
+}
