@@ -1,9 +1,22 @@
 /*----- constants -----*/
 const PLAYER_COLORS = {
     'null': 'white',
-    '1': 'green',
-    '-1': 'pink',
+    '1': 'crimson',
+    '-1': 'darkblue',
 };
+const winningCombos = [
+    [0, 1, 2],
+    [0, 3, 6],
+    [0, 4 ,8],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 4, 5],
+    [6, 7, 8],
+];
+const PLAYER_SHAPES = {
+    '1': 'X',
+    '-1': 'O',
+}
 
 /*----- state variables -----*/
 let board; // array containing each tile
@@ -71,8 +84,8 @@ function renderControls() {
 
 function handleClick(evt) {
     // console.log(boardIdx);
-    const boardIdx = gridSqrs.indexOf(evt.target)
-    if (board[boardIdx] !== null) {
+    const boardIdx = gridSqrs.indexOf(evt.target);
+    if (board[boardIdx] !== null || winner || boardIdx === -1) {
         return;
     }
     winner = getWinner(boardIdx);
@@ -82,5 +95,16 @@ function handleClick(evt) {
 };
 
 function getWinner(boardIdx) {
-    
-}
+    for (let comboArr in winningCombos) {
+        if (Math.abs(board[comboArr[0]] + board[comboArr[1]] + board[comboArr[2]]) === 3) {
+            console.log('win')
+            return turn;
+        };
+        if (!board.includes(null)) {
+            console.log('tie')
+            return 'T';
+        };
+        console.log('nothing')
+        return null;
+    };
+};
