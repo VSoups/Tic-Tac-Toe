@@ -9,7 +9,7 @@ html {
 
 body {
     align-items: center;
-    background-color: slategray;
+    background-image: linear-gradient(45deg, snow, black);
     height: 100vh;
     margin: 0;
     display: flex;
@@ -42,12 +42,13 @@ div > p {
 
 #game-board {
     display: grid;
-    background-color: whitesmoke;
+    /* background-color: whitesmoke; */
     grid-template-columns: auto auto auto;
     margin-top: 4.5vmin;
     width: 50vmin;
     height: 50vmin;
-    border: 5px solid white;
+    /* border: 5px solid white; */
+    gap: 1vmin;
 }
 
 #game-board > div {
@@ -66,14 +67,24 @@ div > p {
     transition: 0.1s ease-in-out;
 }
 
+#game-board > div:active {
+    transform: scale(0.9);
+    transition: 0.1s ease-in-out;
+}
+
 #restart {
     margin-top: 7vmin;
-    width: 8rem;
-    height: 2rem;
+    width: 9rem;
+    height: 2.5rem;
     color: black;
     background-color: springgreen;
+    font-family: "Righteous", sans-serif;
+    font-size: 18px;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 #restart:hover {
-    background-color: aquamarine;
+    background-color: rgb(157, 255, 206);
 }
+

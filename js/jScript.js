@@ -2,7 +2,7 @@
 const PLAYER_COLORS = {
     'null': 'white',
     '1': 'crimson',
-    '-1': 'darkblue',
+    '-1': 'aqua',
 };
 const winningCombos = [
     [0, 1, 2],
@@ -10,13 +10,10 @@ const winningCombos = [
     [0, 4 ,8],
     [1, 4, 7],
     [2, 5, 8],
+    [2, 4, 6],
     [3, 4, 5],
     [6, 7, 8],
 ];
-const PLAYER_SHAPES = {
-    '1': 'X',
-    '-1': 'O',
-}
 
 /*----- state variables -----*/
 let board; // array containing each tile
@@ -27,6 +24,7 @@ let winner; // variable holding current game status (null: in progress)
 const msgEl = document.getElementById('sub-header');
 const resetBtn = document.getElementById('restart');
 const gridSqrs = [ ...document.querySelectorAll('#game-board > div')];
+const gridLetters = [ ...document.querySelectorAll('#game-board > div > p')];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener('click', init);
@@ -39,7 +37,7 @@ init();
 function init() {
             // 1     2    3     4     5     6     7     8      9    cell numbers
     board = [null, null, null, null, null, null, null, null, null];
-    turn = '1'; // P1 starts
+    turn = 1; // P1 starts
     winner = null; //game in progress
     render();
 };
@@ -57,54 +55,48 @@ function renderBoard() {
         const clickedSqr = document.getElementById(`cell0${sqrIdx}`);
         clickedSqr.style.backgroundColor = PLAYER_COLORS[board[sqrIdx]];
     });
-}
+};
 
 function renderMessage() {
     if (winner === 'T') {
         msgEl.innerText = 'Out of moves, it\'s a tie!'
-    } else if (winner === turn) {
+    } else if (winner) {
         msgEl.innerHTML = `<span style="color: ${PLAYER_COLORS[winner]}">${PLAYER_COLORS[winner].toUpperCase()}</span> wins!`
     } else {
-        msgEl.innerHTML = `It's <span style="color: ${PLAYER_COLORS[turn]}">${PLAYER_COLORS[turn].toUpperCase()}</span>'s turn.`
-    }
-}
+        msgEl.innerHTML = `<span style="color: ${PLAYER_COLORS[turn]}">${PLAYER_COLORS[turn].toUpperCase()}</span> pick a square.`
+    };
+};
 
 function renderControls() {
-    if (winner == true) {
+    if (winner || winner === 'T') {
         resetBtn.style.visibility = 'visible';
     } else {
         resetBtn.style.visibility = 'hidden'
     };
-    // board.forEach(function(cellNum) { // remove highlight color after square has been clicked
-    //     if (cellNum === true) {
-    //         document.getElementById(``)
-    //     }
-    // });
-}
+};
 
 function handleClick(evt) {
     // console.log(boardIdx);
     const boardIdx = gridSqrs.indexOf(evt.target);
     if (board[boardIdx] !== null || winner || boardIdx === -1) {
         return;
-    }
-    winner = getWinner(boardIdx);
+    };
     board[boardIdx] = turn;
+    winner = getWinner();
     turn *= -1;
     render();
 };
 
-function getWinner(boardIdx) {
-    for (let comboArr in winningCombos) {
+function getWinner() {
+    for (let comboArr of winningCombos) {
         if (Math.abs(board[comboArr[0]] + board[comboArr[1]] + board[comboArr[2]]) === 3) {
-            console.log('win')
+            // console.log('win')
             return turn;
         };
-        if (!board.includes(null)) {
-            console.log('tie')
+        if (!board.includes(null) && winner) {
+            // console.log('tie')
             return 'T';
         };
-        console.log('nothing')
-        return null;
+        // console.log('nothing')
     };
 };
